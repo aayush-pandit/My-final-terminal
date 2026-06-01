@@ -21,14 +21,17 @@ jobs:
         distribution: 'temurin'
 
     - name: Pure Project Structure Generator
-      # यह इंजन बिना किसी पुराने कैशे के बिल्कुल नया और 100% सही ढांचा खुद तैयार करेगा
       run: |
+        # सर्वर स्तर पर पुराने किसी भी गलत ढांचे को पूरी तरह साफ करना
+        rm -rf app build.gradle.kts settings.gradle.kts gradlew gradle .gradle My-final-terminal
+        
+        # मुख्य डायरेक्टरी के अंदर सही फोल्डर्स का निर्माण
         mkdir -p app/src/main/java/com/example
         mkdir -p app/src/main/res/values
         mkdir -p app/src/main/res/layout
         mkdir -p gradle/wrapper
 
-        # शुद्ध MainActivity.kt का निर्माण जो आपके ऐप का असली बेस तैयार करेगी
+        # शुद्ध MainActivity.kt का निर्माण
         echo 'package com.example
         import android.os.Bundle
         import androidx.activity.ComponentActivity
@@ -38,7 +41,7 @@ jobs:
             }
         }' > app/src/main/java/com/example/MainActivity.kt
 
-        # [PERFECT FIX] सर्वर पर सीधे सभी android:name एट्रिब्यूट के साथ शुद्ध मेनिफेस्ट का निर्माण
+        # [ULTIMATE MANIFEST FIX] सीधे सही रास्ते पर शुद्ध मेनिफेस्ट का निर्माण
         echo '<?xml version="1.0" encoding="utf-8"?>
         <manifest xmlns:android="http://android.com">
             <application
@@ -102,11 +105,13 @@ jobs:
         cache-disabled: true
 
     - name: Generate Final APK
-      run: gradle assembleDebug --no-daemon --no-build-cache --no-configuration-cache
+      # [CRITICAL COMMAND FIX] गिटहब को जबरन वर्तमान डायरेक्टरी का उपयोग करने के लिए मजबूर करना
+      run: gradle assembleDebug --no-daemon --no-build-cache --no-configuration-cache -p .
 
     - name: Upload APK Download Link
-      uses: actions/upload-artifact@v4
+      uses: actions/artifact@v4
       with:
         name: my-android-app
         path: |
           app/build/outputs/apk/debug/*.apk
+
