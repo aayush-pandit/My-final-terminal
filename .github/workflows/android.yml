@@ -109,7 +109,8 @@ jobs:
       run: gradle assembleDebug --no-daemon --no-build-cache --no-configuration-cache -p .
 
     - name: Upload APK Download Link
-      uses: actions/artifact@v4
+      uses: actions/upload-artifact@v4
+
       with:
         name: my-android-app
         path: |
